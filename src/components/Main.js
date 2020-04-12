@@ -38,9 +38,9 @@ class Main extends Component{
            			<ProfileMenu />
            		</div>
            	</PrivateRoute>
-
+           	<Route path="/" component={()=> <HomePage /> } />
            	</Switch>
-           
+           	
 			</div>
 		)
 	}
