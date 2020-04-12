@@ -1,0 +1,172 @@
+Ask for mobile number:
+from EasyChatApp.utils import logger,get_access_token
+import json
+import requests
+import sys
+def f(x):
+    json_response = {}
+    json_response['status_code'] = '500'
+    json_response['status_message'] = 'Internal server error.'
+    json_response['child_choice'] = ''
+    json_response['data'] = {}
+    try:
+        url="https://muleuat.capitalfirst.com:1447/proxy/api/1.0/idfc/banking/AccountsList"
+        access_token=get_access_token()
+        json_response['data']['print']=x
+        json_response['data']['MBNumber']=x
+        payload= {
+         "AccountsListRequest": {
+            "MobNb": x
+                }
+            }
+        headers = {
+        "Content-Type": "application/json",
+        "access_token": access_token,
+        "Source":"WAPP"
+        }
+        payload=json.dumps(payload)
+        resp = requests.post(url=url,data=payload, headers=headers, timeout=15)
+        resp_data=json.loads(resp.text)
+        json_response['data']['resp_data'] = resp_data
+        
+        json_response['status_code']='200'
+        json_response['status_message']='Success'
+        return json_response
+    except Exception as E:
+        exc_type, exc_obj, exc_tb = sys.exc_info()
+        logger.error('PostProcessorContent: %s at %s',str(E), str(exc_tb.tb_lineno))
+        json_response['status_code'] = '500'
+        json_response['status_message'] = 'ERROR :-  '+str(E)+ ' at line no: ' +str(exc_tb.tb_lineno)
+        return json_response
+
+
+
+url="https://muleuat.capitalfirst.com:1447/proxy/api/1.0/idfc/banking/TransactionRequest"
+                accountid=resp_data['AccountsListResponse'][0]['AcctNb']
+                accountid=accountid[-4:]
+                json_response['data']['accountid']=accountid
+                Payload = {
+                    "TransactionRequest": {
+                        "MobNb": x,
+                        "AcctNb": accountid
+                    }
+                }
+                headers = {
+                    "Content-Type": "application/json",
+                    "access_token": access_token,
+                    "Source":"WAPP"
+                }
+                PayLoad=json.dumps(Payload)
+                respforone = requests.post( url=url,data=Payload, headers=headers, timeout=15)
+                resp_dataforone=json.loads(respforone.text)
+                json_response['data']['resp_dataforone'] = resp_dataforone
+                length=len(resp_dataforone["MiniStatement"]["TrnDtls"])
+                if(length>5):
+                    length=5
+                toshow=""    
+                for i in range(0,length):
+                    for key, value in resp_dataforone["MiniStatement"]["TrnDtls"][i]: 
+                        to_show+=key+":"+value 
+                json_response['data']['to_show']=to_show   
+
+
+
+Number of accounts:
+
+
+
+
+from EasyChatApp.utils import logger
+import sys
+def f():
+    response = {}
+    response['status_code'] = 500
+    response['status_message'] = 'Internal server error.'
+    response['data'] = {}
+    response['cards'] = []
+    response['choices'] = []
+    response['images'] = []
+    response['videos'] = []
+    response['recommendations'] = []
+    response['API_REQUEST_PACKET'] = {"url":"","data":"data","header":""}
+    response['API_RESPONSE_PACKET'] = {"response":""}
+    try:
+        url="https://muleuat.capitalfirst.com:1447/proxy/api/1.0/idfc/banking/TransactionRequest"
+        accountid=resp_data['AccountsListResponse'][0]['AcctNb']
+        accountid=accountid[-4:]
+        response['accountid']=accountid
+        Payload = {
+            "TransactionRequest": {
+                "MobNb": x,
+                "AcctNb": accountid
+            }
+        }
+        headers = {
+            "Content-Type": "application/json",
+            "access_token": access_token,
+            "Source":"WAPP"
+        }
+        PayLoad=json.dumps(Payload)
+        respforone = requests.post( url=url,data=Payload, headers=headers, timeout=15)
+        resp_dataforone=json.loads(respforone.text)
+        json_response['data']['resp_dataforone'] = resp_dataforone
+        length=len(resp_dataforone["MiniStatement"]["TrnDtls"])
+        if(length>5):
+            length=5
+        toshow=""    
+        for i in range(0,length):
+            for key, value in resp_dataforone["MiniStatement"]["TrnDtls"][i]: 
+                to_show+=key+":"+value 
+        json_response['data']['to_show']=to_show   
+        response['recommendations']=['Main Menu']
+        response['status_code']='200'
+        response['status_message']='Success'
+        return response
+    except Exception as E:
+        exc_type, exc_obj, exc_tb = sys.exc_info()
+        logger.error('ApiTreeContent: %s at %s',str(E), str(exc_tb.tb_lineno))
+        response['status_code'] = 500
+        response['status_message'] = 'ERROR :-  '+str(E)+ ' at line no: ' +str(exc_tb.tb_lineno)
+        return response
+
+
+
+
+
+<div className="col-xl-4 col-lg-4 form">
+      				<h2 className='headingform'> Enter your query </h2>
+      				<p> What is your query about </p>
+					<label>
+                	<input type="radio" value="generalinsurance" name="generalinsurance"  onChange={this.onRadioChange} />
+                	<span>General Insurance</span>
+              		</label>
+              		{this.state.generalinsurance?
+              			this.state.generalinsurancelist.map((gi)=>{
+              				return (<div><label>
+                	<input type="radio" value={gi} name={gi}  onChange={this.onRadioChange} />
+                	<span>{gi}</span>
+              		</label></div>)
+              			})
+              			:
+              			null
+              		}
+         			<label>
+                	<input type="radio" value="lifeinsurance" name="lifeinsurance"  onChange={this.onRadioChange} />
+                	<span>Life Insurance</span>
+              		</label>
+            		{this.state.lifeinsurance?
+              			this.state.lifeinsurancelist.map((li)=>{
+              				return (<div><label>
+                	<input type="radio" value={li} name={li}  onChange={this.onRadioChange} />
+                	<span>{li}</span>
+              		</label></div>)
+              			})
+              			:
+              			null
+              		}
+              		<label>
+                	<input type="radio" value="mutualfunds" name="mutualfunds"  onChange={this.onRadioChange} />
+                	<span>Mutual Funds</span>
+              		</label>
+
+         			</div>
