@@ -20,8 +20,8 @@ import Footer from '../Footer'
 function RenderEvents({ event }) {
 		var imageurl=baseUrl+"/image/"+event["iconUrl"]
         return(
-            <Card  >
-                    <CardImg src={imageurl} alt={event.name} />
+            <Card className="paddingTop" >
+                    <CardImg className="paddingTop" src={imageurl} alt={event.name} />
                     <CardImgOverlay>
                     <br/>
                     <br/>
