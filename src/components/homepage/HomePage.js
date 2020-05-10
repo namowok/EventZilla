@@ -21,7 +21,7 @@ function RenderEvents({ event }) {
 		var imageurl=baseUrl+"/image/"+event["iconUrl"]
         return(
             <Card className="d-flex flex-column paddingTop" >
-                    <CardImg className="paddingTop" src={imageurl} alt={event.name} />
+                    <CardImg className="card-img-top paddingTop" src={imageurl} alt={event.name} />
                     <CardImgOverlay>
                     <br/>
                     <br/>
